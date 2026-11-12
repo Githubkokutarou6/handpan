@@ -68,88 +68,154 @@ article.post figcaption{font-size:12px;color:var(--mut);padding:8px 10px;backgro
 .tagchip{display:inline-block;font-size:11px;color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:1px 10px;margin-bottom:8px;letter-spacing:.08em}
 @media(max-width:640px){header.site .wrap{flex-wrap:wrap}nav.gnav{width:100%;margin-top:4px}nav.gnav a{margin-left:0;margin-right:14px}.hero{padding:44px 0 30px}.hero h1{font-size:27px}}
 .card img.ph{width:100%;height:190px;object-fit:cover}
+
+.words{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:680px){.words{grid-template-columns:repeat(2,1fr)}}
+.word{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.word .lbl{font-size:11px;color:var(--gold);letter-spacing:.14em;margin-bottom:6px}
+.word p{font-size:15px;color:var(--cream);line-height:1.9}
+.linkrow{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px;text-decoration:none}
+.linkrow .t{font-size:17px;color:var(--cream);font-weight:700}
+.linkrow .d{font-size:13.5px;color:var(--mut)}
+.linkrow:hover .t{color:var(--gold2)}
+.steps{list-style:none;counter-reset:st;margin-top:18px}
+.steps li{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:10px;font-size:14.5px}
+.steps li b{color:var(--gold2);margin-right:8px}
+.vcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.vcard p{font-size:14.5px;color:var(--txt);margin-bottom:8px}
+.hero .mascot{max-width:320px;margin:6px auto 18px;border-radius:16px}
+.hero .brand{color:var(--gold);letter-spacing:.3em;font-size:12px}
+.hero .relax{color:var(--cream);font-size:17px;margin-top:16px;letter-spacing:.08em}
+.hero .relax-en{color:var(--mut);font-size:13px;letter-spacing:.14em}
+.hero .btns{margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.goal{color:var(--mut);font-size:13.5px;margin-top:6px}
 </style>
 </head>
-<body>
+<body id="top">
 
 <header class="site"><div class="wrap">
 <a class="logo" href="index.html">Handpan_K<small>HANDPAN &nbsp;KANAZAWA</small></a>
-<nav class="gnav"><a href="index.html#scales">スケール</a><a href="scale-guide.html">ガイド</a><a href="osusume.html">おすすめ</a><a href="index.html#gear">機材</a></nav>
+<nav class="gnav"><a href="#words">言葉</a><a href="#videos">演奏動画</a><a href="#scales">スケール</a><a href="#guide">ガイド</a><a href="#gear">機材</a><a href="#links">リンク</a></nav>
 </div></header>
 
 <div class="hero"><div class="wrap">
-<h1><span class="en">THE SOUND OF THE HANDPAN</span>ハンドパンの音色に、<br>言葉を添えて</h1>
-<p class="lead">金沢を拠点に活動するハンドパン奏者 handpan_kk のホームページです。演奏動画、スケール（音階）の解説、初めての一台の選び方と、愛用の機材をまとめています。<br>Sharing the quiet resonance of the handpan, from Kanazawa, Japan.</p>
-<figure><img src="handpan-mascot.jpg" alt="ハンドパンのマスコット"><figcaption>ハンドパンのマスコット／Handpan mascot</figcaption></figure>
+<img class="mascot" src="handpan-mascot.jpg" alt="ハンドパンのマスコット">
+<p class="brand">HANDPAN PLAYER IN JAPAN</p>
+<h1><span class="en">HANDPAN</span>ハンドパンの音色に、<br>言葉を添えて</h1>
+<p class="dual">Adding words to the sound of the handpan.</p>
+<p class="relax">癒し・瞑想・Relux</p>
+<p class="relax-en">Healing – Meditation – Relux</p>
+<p class="lead">Handpan player in Japan. I pair the soothing sound of the handpan with short words of reflection. Here you will find my performances, the words behind them, and the instruments I love.</p>
+<div class="btns">
+<a class="btn" href="https://www.instagram.com/handpan_kk/" target="_blank" rel="noopener">Instagramで聴く</a>
+<a class="btn ghost" href="#videos">演奏動画を見る</a>
+</div>
 </div></div>
 
 <div class="wrap">
 <section id="about">
 <h2 class="sec"><span class="en">ABOUT</span>プロフィール</h2>
 <div class="profile">
-<p>こんにちは、handpan_kk です。金沢を拠点にハンドパンを演奏し、Instagramで演奏動画を公開しています。愛器は Yishama F3 Pygmy 19（19音）。ロビーコンサートのような、明るく静かな場所での小さな演奏会が理想です。</p>
-<p style="margin-top:10px">Handpan player based in Kanazawa, Japan. My instrument is a Yishama F3 Pygmy 19. Performances and videos are on Instagram and YouTube.</p>
+<p>金沢を拠点に、ハンドパンを弾き続けています。余韻を、自分の言葉とともに届けるのが自分のスタイルです。</p>
+<p class="dual">Based in Kanazawa, I keep playing the handpan. My style is to share the lingering sound with short words of my own.</p>
 </div>
+</section>
+
+<section id="words">
+<h2 class="sec"><span class="en">WORDS</span>言葉</h2>
+<p class="secsub">演奏に添えてきた、短い言葉たちです。</p>
+<div class="words">
+<div class="word"><p>うまく弾けなくても<br>音は正直に心を映す<br>今日の自分を受け入れる</p></div>
+<div class="word"><p class="lbl">REEL — 2026</p><p>みどりの風に 音をのせて<br>心をほどく</p></div>
+<div class="word"><p class="lbl">REEL — 新緑のテラスにて</p><p>男は離れて「相手の大切さ」に気づく<br>女は離れて「相手の必要のなさ」に気づく</p></div>
+<div class="word"><p class="lbl">REEL — 海辺にて（モノクロ）</p></div>
+</div>
+</section>
+
+<section id="videos">
+<h2 class="sec"><span class="en">VIDEOS</span>演奏動画</h2>
+<p class="secsub">心に残った3つの演奏を厳選しました。</p>
+<div class="vcard"><p>手話を添えた、ピアノとヴァイオリンとの共演。『愛を込めて花束を』を届けます。</p>
+<a class="btn ghost" href="https://www.instagram.com/reel/DfE-uo8jJvZ/" target="_blank" rel="noopener">▶ Instagramで開く</a></div>
+<div class="vcard"><p>優しさから始まる、演奏風景の撮影『リール』</p>
+<a class="btn ghost" href="https://www.instagram.com/reel/DfIC9zNCYKJ/" target="_blank" rel="noopener">▶ Instagramで開く</a></div>
+<div class="vcard"><p>『One note at a time – ひと音ずつ』一音一音、心を込めて。</p>
+<a class="btn ghost" href="https://www.tiktok.com/@handpan_k/video/7702712495126891796" target="_blank" rel="noopener">▶ TikTokで開く</a></div>
 </section>
 
 <section id="scales">
 <h2 class="sec"><span class="en">POPULAR SCALES</span>人気のスケール紹介</h2>
 <p class="secsub">世界のメーカーで人気のスケールを、音の構成（カタカナは固定ド表記）とともに紹介します。</p>
-<div class="cards c3">
-<div class="card"><img src="d-kurd-13-diagram.png" alt="D Kurd 13 配置図"><div class="body">
-<h3><a href="d-kurd-13.html">D Kurd 13</a></h3>
-<p>世界で最も愛される、Dマイナーの13音。情感のあるメロディが作りやすい定番スケールです。</p>
-<a class="btn ghost" href="d-kurd-13.html">詳しく見る</a></div></div>
-<div class="card"><img src="fsharp-low-pygmy-21-diagram.png" alt="F# Low Pygmy 21 配置図"><div class="body">
-<h3><a href="f-low-pygmy-21.html">F# Low Pygmy 21</a></h3>
-<p>浮遊感のあるマイナーペンタ、21音の拡張版。瞑想やヒーリング系の演奏で人気です。</p>
-<a class="btn ghost" href="f-low-pygmy-21.html">詳しく見る</a></div></div>
-<div class="card"><img src="d-aegean-18-diagram.png" alt="D Aegean 18 配置図"><div class="body">
-<h3><a href="d-aegean-18.html">D Aegean 18</a></h3>
-<p>海のような広がり、Dリディアンの18音。明るく開放的な響きのスケールです。</p>
-<a class="btn ghost" href="d-aegean-18.html">詳しく見る</a></div></div>
-</div>
+<a class="linkrow" href="d-kurd-13.html"><span class="t">D Kurd 13</span><br><span class="d">世界初の、12音階で奏でるルクセンブルクの音色</span></a>
+<a class="linkrow" href="f-low-pygmy-21.html"><span class="t">F# Low Pygmy 21</span><br><span class="d">低音の響きを活かした、深みのあるサウンド</span></a>
+<a class="linkrow" href="d-aegean-18.html"><span class="t">D Aegean 18</span><br><span class="d">地中海の青を思わせる、明るく澄んだ音色</span></a>
 </section>
 
 <section id="guide">
-<h2 class="sec"><span class="en">GUIDE</span>スケールガイド</h2>
-<div class="profile">
-<p>「スケールって何？」——ハンドパン選びでいちばん戸惑いやすいポイントを、D Kurdを例にまとめました。初めての一台を探している方へ。</p>
-<a class="btn" href="scale-guide.html">スケールガイドを読む</a>
-<a class="btn ghost" href="osusume.html" style="margin-left:8px">おすすめハンドパンを見る</a>
+<h2 class="sec"><span class="en">GUIDE</span>ハンドパンの始め方ガイド</h2>
+<div class="cards c3">
+<div class="card"><div class="body"><h3>はじめてのハンドパン</h3><p>演奏がはじめての方に。ハンドパンの選び方をそのまま、最初の一歩として。</p></div></div>
+<div class="card"><div class="body"><h3>選び方ガイド</h3><p>スケール・価格・メーカーから、あなたの一台を見つけるためのガイド。</p></div></div>
+<div class="card"><div class="body"><h3>練習サポート</h3><p>リズムの取り方や具体的な練習の進め方を紹介します。『リズムの取り方』と『手の組み立て方』から確認しましょう。</p></div></div>
 </div>
+<ol class="steps">
+<li><b>1</b>まずはSNSで音と雰囲気を楽しむ。演奏と演奏会の更新。</li>
+<li><b>2</b>演奏会に参加して、演奏を生で聴く。</li>
+<li><b>3</b>気になる楽器を試すところから。</li>
+</ol>
+<p class="note" style="margin-top:10px">スケールの基礎は「<a href="scale-guide.html">スケールガイド</a>」にまとめています。</p>
 </section>
 
 <section id="gear">
-<h2 class="sec"><span class="en">GEAR</span>機材コーナー</h2>
-<p class="secsub">演奏・撮影に使っている機材と、愛読書などの関連アイテムです。</p>
-<div class="pr">※このコーナーにはアフィリエイト広告を含みます。リンクから商品を購入されると、運営者（handpan_kk）に紹介料が入る場合があります。価格は確認時点のもので、変動します。</div>
+<h2 class="sec"><span class="en">GEAR</span>わたしの機材</h2>
+<p class="secsub">演奏で紹介している機材や、気に入っているものをまとめました。</p>
+<div class="pr">※このセクションはアフィリエイト広告（Amazonアソシエイト・楽天アフィリエイト）を含みます。リンク先で購入されると、運営者に紹介料が入る場合があります。価格は変動します（ここに載せた価格は2025年6月時点のものです）。</div>
 <div class="cards c2">
-<div class="card"><img class="ph" src="https://tshop.r10s.jp/marks/cabinet/item-robotnew1/roland-mn10-a.jpg" alt="Roland Mood Pan MN-10"><div class="body">
-<h3>Roland Mood Pan MN-10</h3>
-<p>電子ハンドパン。静かな音量で練習したいときの選択肢として紹介しています。</p>
-<p class="price">¥77,000（2026年11月5日時点）</p>
-<a class="btn" href="https://a.r10.to/hgiLbd" rel="sponsored nofollow noopener" target="_blank">楽天市場で見る（PR）</a></div></div>
-<div class="card"><div class="body">
-<h3>CAHAYA ハンドパンスタンド</h3>
-<p>演奏時の安定感を助けるスタンド。</p>
-<p class="price">¥1,780</p>
-<a class="btn" href="https://www.amazon.co.jp/dp/B0GXDZRBWY?tag=handpank0c-22" rel="sponsored nofollow noopener" target="_blank">Amazonで見る（PR）</a></div></div>
+<div class="card"><img class="ph" src="https://i.ytimg.com/vi/1jqyxPq8Bc4/maxresdefault.jpg" alt="L'ATELIER DE ◯ D Kurd 11"><div class="body">
+<h3>L'ATELIER DE ◯ D Kurd 11</h3>
+<p>本格派の11音モデル。</p>
+<p class="price">¥188,000</p>
+<a class="btn" href="https://www.amazon.co.jp/dp/B08H2G32R1?tag=handpank0c-22" rel="sponsored nofollow noopener" target="_blank">Amazonで見る（PR）</a></div></div>
+<div class="card"><img class="ph" src="https://i.ytimg.com/vi/nPy_f8ud3Zc/maxresdefault.jpg" alt="MASH D Kurd 10"><div class="body">
+<h3>MASH D Kurd 10</h3>
+<p>MASHの上位モデル、10音。</p>
+<p class="price">¥124,667</p>
+<a class="btn" href="https://www.amazon.co.jp/dp/B0BS727Q13?tag=handpank0c-22" rel="sponsored nofollow noopener" target="_blank">Amazonで見る（PR）</a></div></div>
+<div class="card"><img class="ph" src="https://i.ytimg.com/vi/TPanoPLUzaA/maxresdefault.jpg" alt="MASH D Kurd 9"><div class="body">
+<h3>MASH D Kurd 9</h3>
+<p>初めての一台にもおすすめの9音。</p>
+<p class="price">¥114,218</p>
+<a class="btn" href="https://www.amazon.co.jp/dp/B0BS6ZKPH2?tag=handpank0c-22" rel="sponsored nofollow noopener" target="_blank">Amazonで見る（PR）</a></div></div>
+<div class="card"><img class="ph" src="https://videos.files.wordpress.com/TLpjbLP3/copy_a16c8d99-65b3-4bc5-a419-70e76884975e_mp4_hd.original.jpg" alt="Ywanwj D Kurd 9"><div class="body">
+<h3>Ywanwj D Kurd 9</h3>
+<p>手に取りやすい価格帯の9音。</p>
+<p class="price">¥29,899</p>
+<a class="btn" href="https://www.amazon.co.jp/dp/B0CQYV62BN?tag=handpank0c-22" rel="sponsored nofollow noopener" target="_blank">Amazonで見る（PR）</a></div></div>
 <div class="card"><div class="body">
 <h3>SHURE MV88+ ビデオキット</h3>
 <p>スマホ撮影用の録音マイク。私の演奏動画もスマホ＋外部マイクで撮っています。</p>
-<p class="price">¥29,155（2025年6月時点）</p>
+<p class="price">¥29,155</p>
 <a class="btn" href="https://www.amazon.co.jp/dp/B08G7T3Q9S?tag=handpank0c-22" rel="sponsored nofollow noopener" target="_blank">Amazonで見る（PR）</a></div></div>
-<div class="card"><img class="ph" src="https://videos.files.wordpress.com/htMmn1Dw/copy_5a2612a6-e4d4-4c52-b00b-f61c2b02ddfe_mp4_hd_1080p.original.jpg" alt="ティンシャ"><div class="body">
-<h3>ティンシャ［アマナマナ］</h3>
+<div class="card"><img class="ph" src="https://videos.files.wordpress.com/htMmn1Dw/copy_5a2612a6-e4d4-4c52-b00b-f61c2b02ddfe_mp4_hd_1080p.original.jpg" alt="アマナマナ ティンシャ"><div class="body">
+<h3>アマナマナ ティンシャ</h3>
 <p>演奏の始まりと終わりに鳴らす、小さなシンバル。場の空気を整えてくれます。</p>
-<p class="price">¥15,730（2025年6月時点）</p>
+<p class="price">¥15,730</p>
 <a class="btn" href="https://www.amazon.co.jp/dp/B082L3LC16?tag=handpank0c-22" rel="sponsored nofollow noopener" target="_blank">Amazonで見る（PR）</a></div></div>
-<div class="card"><img class="ph" src="https://videos.files.wordpress.com/m2QrlkRN/copy_e36b3291-76d2-4a57-95c7-766cb5b1b708_mp4_hd.original.jpg" alt="LEDキャンドルライト"><div class="body">
-<h3>LEDキャンドルライト Goldprice</h3>
+<div class="card"><img class="ph" src="https://videos.files.wordpress.com/m2QrlkRN/copy_e36b3291-76d2-4a57-95c7-766cb5b1b708_mp4_hd.original.jpg" alt="Goldprice LEDキャンドルライト"><div class="body">
+<h3>Goldprice LEDキャンドルライト</h3>
 <p>演奏動画の雰囲気づくりに使う、ゆらぎのあるLEDキャンドルです。</p>
-<p class="price">¥2,449（2025年6月時点）</p>
+<p class="price">¥2,449</p>
 <a class="btn" href="https://www.amazon.co.jp/dp/B09ZB1G4NS?tag=handpank0c-22" rel="sponsored nofollow noopener" target="_blank">Amazonで見る（PR）</a></div></div>
+<div class="card"><div class="body">
+<h3>CAHAYA 折りたたみ譜面台</h3>
+<p>演奏時の安定感を助けるスタンド。</p>
+<p class="price">¥1,780</p>
+<a class="btn" href="https://www.amazon.co.jp/dp/B0GXDZRBWY?tag=handpank0c-22" rel="sponsored nofollow noopener" target="_blank">Amazonで見る（PR）</a></div></div>
+<div class="card"><img class="ph" src="https://tshop.r10s.jp/marks/cabinet/item-robotnew1/roland-mn10-a.jpg" alt="Roland Mood Pan MN-10"><div class="body">
+<h3>Roland Mood Pan MN-10</h3>
+<p>電子ハンドパン。静かな音量で練習したいときの選択肢として紹介しています。※2026年11月5日時点・楽天市場（マークスミュージック）／価格は変動します</p>
+<p class="price">¥77,000</p>
+<a class="btn" href="https://a.r10.to/hgiLbd" rel="sponsored nofollow noopener" target="_blank">楽天市場で見る（PR）</a></div></div>
 <div class="card"><div class="body">
 <h3>漫画『星旅少年』第6巻（坂月さかな）</h3>
 <p>全巻愛読している漫画です。「ほのぼのとした絵柄とは裏腹に、現代の弱点を鋭く突いた世界観に引き込まれる漫画です」——店主のひとことです。作者の坂月さかな先生にお会いしたこともあります。</p>
@@ -159,36 +225,69 @@ article.post figcaption{font-size:12px;color:var(--mut);padding:8px 10px;backgro
 <p class="note" style="margin-top:12px">楽器本体のおすすめは「<a href="osusume.html">おすすめハンドパン</a>」の記事にまとめています。</p>
 </section>
 
-<section id="oto-shoku">
-<h2 class="sec"><span class="en">MUSIC &amp; FOOD</span>音と食の、小さなおすすめ</h2>
-<p class="secsub">演奏の合間に楽しみたい配信と、贈りものや自分へのご褒美に選びたいお取り寄せを集めた、小さなコーナーです。</p>
-<div class="pr">※このコーナーにはアフィリエイト広告（アクセストレード）を含みます。価格は各リンク先の表示に従うため、このコーナーには価格を書いていません。</div>
-<div class="cards c2">
-<div class="card"><div class="body"><h3>WOWOW</h3><p>音楽ライブや映画、ドラマを配信で楽しめるサービスです。おうち時間の音楽鑑賞に。</p><a class="btn" href="https://h.accesstrade.net/sp/cc?rk=0100pjmj00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
-<div class="card"><div class="body"><h3>紀州梅の里なかた（中田食品）</h3><p>紀州の梅干し・梅製品のお取り寄せ。贈りものにも選びやすい一軒です。</p><a class="btn" href="https://h.accesstrade.net/sp/cc?rk=0100hgvz00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
-<div class="card"><div class="body"><h3>かに本舗</h3><p>かにのお取り寄せ専門店。冬の食卓とお歳暮の候補に。</p><a class="btn" href="https://h.accesstrade.net/sp/cc?rk=0100afhc00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
-<div class="card"><div class="body"><h3>かにまみれ</h3><p>かにを中心とした海鮮のお取り寄せ。年末年始の集まりにも。</p><a class="btn" href="https://h.accesstrade.net/sp/cc?rk=0100a8hw00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
-<div class="card"><div class="body"><h3>さかのネット通販</h3><p>お肉のお取り寄せ。すき焼きや焼肉など、家族の食卓に。</p><a class="btn" href="https://h.accesstrade.net/sp/cc?rk=010084hg00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
-<div class="card"><div class="body"><h3>Cake.jp</h3><p>ケーキのお取り寄せ。記念日や手土産の候補に。</p><a class="btn" href="https://h.accesstrade.net/sp/cc?rk=0100ofdg00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
-<div class="card"><div class="body"><h3>飛騨の酒 山車（原田酒造場）</h3><p>飛騨の地酒のお取り寄せ。お酒好きへの贈りものに。</p><a class="btn" href="https://h.accesstrade.net/sp/cc?rk=0100amwq00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
-</div>
-</section>
-
 <section id="links">
 <h2 class="sec"><span class="en">LINKS</span>SNS・note</h2>
 <ul class="links-list">
 <li><a href="https://www.instagram.com/handpan_kk/" target="_blank" rel="noopener">Instagram @handpan_kk</a><span>演奏動画／Performance videos</span></li>
-<li><a href="https://www.youtube.com/@Handpan_K" target="_blank" rel="noopener">YouTube Handpan_K</a><span>演奏動画のまとめ</span></li>
 <li><a href="https://www.tiktok.com/@handpan_k" target="_blank" rel="noopener">TikTok @handpan_k</a><span>短い演奏動画</span></li>
+<li><a href="https://youtube.com/@handpan_k" target="_blank" rel="noopener">YouTube Handpan_K</a><span>演奏動画のまとめ</span></li>
 <li><a href="https://x.com/handpank303030" target="_blank" rel="noopener">X @handpank303030</a><span>近況とお知らせ</span></li>
-<li><a href="https://note.com/handpank" target="_blank" rel="noopener">note handpank</a><span>読み物版の記事</span></li>
+<li><a href="https://linktr.ee/handpank" target="_blank" rel="noopener">Linktree</a><span>リンク集</span></li>
 </ul>
+</section>
+
+<section id="goal">
+<h2 class="sec"><span class="en">GOAL</span>今後の目標</h2>
+<div class="profile">
+<p>ハンドパンの音色を金沢から届け続けること。演奏と、言葉を届けることが目標です。</p>
+<h3 style="color:var(--cream);margin:16px 0 6px;font-size:16px;letter-spacing:.06em">HANDPAN — KANAZAWA, JAPAN</h3>
+<p>お問い合わせは、Instagram <a href="https://www.instagram.com/handpan_kk/" target="_blank" rel="noopener">@handpan_kk</a> のDMへ。演奏動画は <a href="https://www.tiktok.com/@handpan_k" target="_blank" rel="noopener">TikTok @handpan_k</a> にも投稿しています。</p>
+<p style="margin-top:14px">The sound of the handpan — in Kanazawa, from Kanazawa.<br>ハンドパンの音色は、金沢の静けさから生まれる。</p>
+</div>
+<p class="backbtn"><a href="#top">▲ トップへ戻る</a></p>
+</section>
+
+<section id="food">
+<h2 class="sec"><span class="en">SOUND &amp; FOOD</span>音と食の、小さなおすすめ</h2>
+<p class="secsub">演奏の合間に楽しみたい配信と、贈りものや自分へのご褒美に選びたいお取り寄せを集めた、小さなコーナーです。</p>
+<div class="pr">※このコーナーにはアフィリエイト広告（アクセストレード）を含みます。価格は各リンク先の表示に従うため、このコーナーには価格を書いていません。</div>
+<div class="cards c2">
+<div class="card"><div class="body">
+<h3>WOWOW</h3>
+<p>音楽ライブや映画、ドラマを配信で楽しめるサービスです。おうち時間の音楽鑑賞に。</p>
+<a class="btn ghost" href="https://h.accesstrade.net/sp/cc?rk=0100pjmj00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
+<div class="card"><div class="body">
+<h3>紀州梅の里なかた（中田食品）</h3>
+<p>紀州の梅干し・梅製品のお取り寄せ。贈りものにも選びやすい一軒です。</p>
+<a class="btn ghost" href="https://h.accesstrade.net/sp/cc?rk=0100hgvz00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
+<div class="card"><div class="body">
+<h3>かに本舗</h3>
+<p>かにのお取り寄せ専門店。冬の食卓とお歳暮の候補に。</p>
+<a class="btn ghost" href="https://h.accesstrade.net/sp/cc?rk=0100afhc00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
+<div class="card"><div class="body">
+<h3>かにまみれ</h3>
+<p>かにを中心とした海鮮のお取り寄せ。年末年始の集まりにも。</p>
+<a class="btn ghost" href="https://h.accesstrade.net/sp/cc?rk=0100a8hw00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
+<div class="card"><div class="body">
+<h3>さかのネット通販</h3>
+<p>お肉のお取り寄せ。すき焼きや焼肉など、家族の食卓に。</p>
+<a class="btn ghost" href="https://h.accesstrade.net/sp/cc?rk=010084hg00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
+<div class="card"><div class="body">
+<h3>Cake.jp</h3>
+<p>ケーキのお取り寄せ。記念日や手土産の候補に。</p>
+<a class="btn ghost" href="https://h.accesstrade.net/sp/cc?rk=0100ofdg00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
+<div class="card"><div class="body">
+<h3>飛騨の酒 山車（原田酒造場）</h3>
+<p>飛騨の地酒のお取り寄せ。お酒好きへの贈りものに。</p>
+<a class="btn ghost" href="https://h.accesstrade.net/sp/cc?rk=0100amwq00p248" rel="sponsored nofollow noopener" target="_blank">公式サイトを見る</a></div></div>
+</div>
 </section>
 </div>
 
 <footer class="site"><div class="wrap">
-<p>このサイトにはアフィリエイト広告（Amazonアソシエイト、楽天アフィリエイト、アクセストレード等）を含みます。リンク先で商品を購入されると、運営者に紹介料が入る場合があります。紹介料の有無で、おすすめの順位や評価は変えていません。価格・在庫は変動するため、購入前にリンク先の表示をご確認ください。</p>
-<p style="margin-top:10px">Handpan_K（handpan_kk）／金沢を拠点に活動するハンドパン奏者</p>
+<p>Handpan_K｜ハンドパンの音色に、言葉を添えて（金沢）</p>
+<p>最終更新：2026年11月13日</p>
 </div></footer>
+
 </body>
 </html>

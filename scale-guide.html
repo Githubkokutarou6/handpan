@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ハンドパンのスケールって何？ D Kurdを例に、初めての一台の選び方</title>
+<meta name="description" content="ハンドパンのスケール（音の組み合わせ）の考え方を、D Kurdを例に解説。初めての一台の選び方。">
+<style>
+:root{--bg:#0d1526;--bg2:#111d38;--card:#16233f;--line:#2a3a5f;--gold:#c9a227;--gold2:#e6c65c;--cream:#f4efe4;--mut:#a9b4cc;--txt:#e9e6da}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;line-height:1.85;font-size:16px}
+a{color:var(--gold2)}
+img{max-width:100%;height:auto;display:block}
+.wrap{max-width:880px;margin:0 auto;padding:0 20px}
+header.site{border-bottom:1px solid var(--line);background:rgba(13,21,38,.92);position:sticky;top:0;z-index:10}
+header.site .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:12px;padding-bottom:12px}
+.logo{font-size:19px;font-weight:700;color:var(--cream);text-decoration:none;letter-spacing:.04em}
+.logo small{display:block;font-size:11px;color:var(--gold);font-weight:400;letter-spacing:.18em}
+nav.gnav a{color:var(--mut);text-decoration:none;font-size:13px;margin-left:16px}
+nav.gnav a:hover{color:var(--gold2)}
+.hero{padding:64px 0 40px;text-align:center;background:radial-gradient(ellipse at 50% 0%,#1b2c52 0%,var(--bg) 65%)}
+.hero h1{font-size:34px;line-height:1.5;color:var(--cream);font-weight:700;letter-spacing:.03em}
+.hero h1 .en{display:block;font-size:14px;color:var(--gold);letter-spacing:.22em;font-weight:400;margin-bottom:14px}
+.hero p.lead{color:var(--mut);max-width:640px;margin:20px auto 0;font-size:15px}
+.hero figure{max-width:640px;margin:34px auto 0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.hero figcaption{font-size:12px;color:var(--mut);padding:8px;background:var(--bg2)}
+section{padding:44px 0 8px}
+h2.sec{font-size:23px;color:var(--cream);border-left:4px solid var(--gold);padding-left:12px;margin-bottom:6px}
+h2.sec .en{display:block;font-size:11px;color:var(--gold);letter-spacing:.24em;font-weight:400}
+.secsub{color:var(--mut);font-size:14px;margin-bottom:20px}
+.cards{display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:680px){.cards.c3{grid-template-columns:repeat(3,1fr)}.cards.c2{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card .body{padding:16px 18px 20px}
+.card h3{font-size:17px;color:var(--cream);margin-bottom:6px}
+.card h3 a{color:var(--cream);text-decoration:none}
+.card h3 a:hover{color:var(--gold2)}
+.card p{font-size:13.5px;color:var(--mut)}
+.card .price{color:var(--gold2);font-weight:700;font-size:15px;margin-top:8px}
+.btn{display:inline-block;margin-top:12px;background:var(--gold);color:#141414;text-decoration:none;font-weight:700;font-size:13.5px;padding:9px 18px;border-radius:999px}
+.btn.ghost{background:transparent;color:var(--gold2);border:1px solid var(--gold)}
+.note{font-size:12.5px;color:var(--mut)}
+.pr{background:#1a1420;border:1px solid #4a3555;border-radius:10px;padding:12px 16px;font-size:13px;color:#d8cfe0;margin:18px 0}
+.profile{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+.profile p{font-size:14.5px;color:var(--txt)}
+.links-list{list-style:none}
+.links-list li{border-bottom:1px solid var(--line);padding:10px 2px;font-size:14.5px}
+.links-list li span{color:var(--mut);font-size:12.5px;display:block}
+footer.site{border-top:1px solid var(--line);margin-top:56px;padding:28px 0 40px;color:var(--mut);font-size:12.5px}
+.backbtn{text-align:center;margin:44px 0 8px}
+.backbtn a{display:inline-block;background:#000;color:#fff;border:1px solid var(--gold);text-decoration:none;font-weight:700;padding:11px 30px;border-radius:999px;font-size:14.5px}
+article.post{padding:36px 0 0}
+article.post h1{font-size:27px;line-height:1.55;color:var(--cream);margin-bottom:10px}
+article.post .date{color:var(--mut);font-size:13px;margin-bottom:14px}
+article.post h2{font-size:20px;color:var(--cream);border-left:4px solid var(--gold);padding-left:11px;margin:34px 0 10px}
+article.post p{margin-bottom:14px;font-size:15.5px}
+article.post ul,article.post ol{margin:0 0 16px 22px;font-size:15.5px}
+article.post li{margin-bottom:6px}
+article.post figure{margin:20px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+article.post figcaption{font-size:12px;color:var(--mut);padding:8px 10px;background:var(--bg2)}
+.prod{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:20px 22px;margin:18px 0}
+.prod h3{font-size:18px;margin-bottom:4px}
+.prod h3 a{color:var(--cream);text-decoration:none}
+.prod h3 a:hover{color:var(--gold2)}
+.prod .price{color:var(--gold2);font-weight:700;font-size:17px}
+.prod .who{color:var(--cream);font-size:14px;background:#22335a;border-radius:8px;padding:6px 12px;display:inline-block;margin:8px 0}
+.prod p{font-size:14.5px;color:var(--mut);margin-bottom:6px}
+.tagchip{display:inline-block;font-size:11px;color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:1px 10px;margin-bottom:8px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+
+<header class="site"><div class="wrap">
+<a class="logo" href="index.html">Handpan_K<small>HANDPAN &nbsp;KANAZAWA</small></a>
+<nav class="gnav"><a href="index.html#scales">スケール</a><a href="scale-guide.html">ガイド</a><a href="osusume.html">おすすめ</a><a href="index.html#gear">機材</a></nav>
+</div></header>
+
+<div class="wrap"><article class="post">
+<h1>ハンドパンのスケールって何？ D Kurdを例に、初めての一台の選び方</h1>
+<div class="pr">※本記事はアフィリエイト広告を含みます。記事内のリンクから商品を購入されると、運営者（handpan_kk）に紹介料が入る場合があります。紹介料の有無で、おすすめの順位や評価は変えていません。</div>
+<p>こんにちは、handpan_kk です。金沢を拠点にハンドパンを演奏し、Instagramで演奏動画を公開しています。愛器は Yishama F3 Pygmy 19。この記事は「初めての一台を探している人」に向けて、ハンドパン選びでいちばん戸惑いやすい「スケール」の考え方をまとめました。</p>
+
+<h2>スケールとは、楽器に入っている音の組み合わせのこと</h2>
+<p>ハンドパンは、ピアノのように全部の音が入っている楽器ではありません。一台ごとに「入っている音の組み合わせ」が決まっていて、それをスケールと呼びます。だから、買うときに選ぶのは楽器の形や色だけではなく、「どの音の組み合わせか」でもあります。</p>
+
+<h2>なぜスケールが大事か：入っていない音は、そのままでは弾けない</h2>
+<p>たとえば私の愛器（F Pygmy 19）には、ある曲に出てくる♭ソ（Gb）の音が入っていません。その曲は、そのままの音では弾けない箇所が出てきます。スケールを選ぶということは、「自分が弾きたい曲の音が入っているか」を選ぶことでもあるのです。</p>
+
+<h2>よく見る名前：D Kurd の 9音・10音・11音</h2>
+<p>おすすめ記事で紹介している楽器にも、D Kurd というスケールのものが並んでいます。数字はおおまかに音の数で、9音・10音・11音と増えるほど、弾ける音の幅が広がります。反対に、音が少ない一台は覚えることが少なく、初めて触る人には扱いやすい面もあります。</p>
+<ul>
+<li>まず触ってみたい人：音数の少ない入門の一台から</li>
+<li>長く使える一台目がほしい人：10音前後の中間のもの</li>
+<li>音にこだわりたい人：11音など、音の多い本格派</li>
+</ul>
+<p>（各モデルの詳細と価格帯は「おすすめハンドパン」記事へ。価格は変動するため、この記事には書かず、あちらの記事で最新を確認してください。）</p>
+
+<h2>選ぶときのチェックポイント3つ</h2>
+<ol>
+<li>弾きたい曲の音が入っているか（好きな曲が決まっている人は、まずここ）</li>
+<li>音の数が自分の練習量に合っているか（多いほど表現は広がるが、覚えることも増える）</li>
+<li>実際に音を聴いてみて、心地よいと感じるか（動画や試奏の音色で確かめる）</li>
+</ol>
+
+<h2>まとめ</h2>
+<p>スケールは、ハンドパン選びの最初の分かれ道です。難しく考えず、「弾きたい曲の音が入っているか」「音の数が自分に合っているか」の2つから選ぶと、初めての一台でも迷いにくくなります。</p>
+
+<h2>合わせて読みたい</h2>
+<ul>
+<li>価格帯ごとのおすすめ一覧はこちら → <a href="osusume.html">おすすめハンドパン</a></li>
+<li>人気スケールの紹介 → <a href="d-kurd-13.html">D Kurd 13</a>／<a href="f-low-pygmy-21.html">F# Low Pygmy 21</a>／<a href="d-aegean-18.html">D Aegean 18</a></li>
+<li>読み物版（note） → <a href="https://note.com/handpank/n/nfe9e7d9e1fc0" target="_blank" rel="noopener">ハンドパンの『スケール』って何？</a></li>
+<li>演奏動画はこちら → <a href="https://www.instagram.com/handpan_kk/" target="_blank" rel="noopener">Instagram @handpan_kk</a></li>
+</ul>
+
+<div class="backbtn"><a href="index.html">← トップページへ戻る</a></div>
+</article></div>
+<footer class="site"><div class="wrap">
+<p>このサイトにはアフィリエイト広告（Amazonアソシエイト、楽天アフィリエイト、アクセストレード等）を含みます。リンク先で商品を購入されると、運営者に紹介料が入る場合があります。紹介料の有無で、おすすめの順位や評価は変えていません。価格・在庫は変動するため、購入前にリンク先の表示をご確認ください。</p>
+<p style="margin-top:10px">Handpan_K（handpan_kk）／金沢を拠点に活動するハンドパン奏者</p>
+</div></footer>
+</body>
+</html>

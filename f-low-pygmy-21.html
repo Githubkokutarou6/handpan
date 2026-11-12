@@ -12,7 +12,7 @@ body{background:var(--bg);color:var(--txt);font-family:"Hiragino Kaku Gothic Pro
 a{color:var(--gold2)}
 img{max-width:100%;height:auto;display:block}
 .wrap{max-width:880px;margin:0 auto;padding:0 20px}
-header.site{border-bottom:1px solid var(--line);background:rgba(13,21,38,.92);position:sticky;top:0;z-index:10}
+header.site{border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:10}
 header.site .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:12px;padding-bottom:12px}
 .logo{font-size:19px;font-weight:700;color:var(--cream);text-decoration:none;letter-spacing:.04em}
 .logo small{display:block;font-size:11px;color:var(--gold);font-weight:400;letter-spacing:.18em}
@@ -66,6 +66,7 @@ article.post figcaption{font-size:12px;color:var(--mut);padding:8px 10px;backgro
 .prod .who{color:var(--cream);font-size:14px;background:#22335a;border-radius:8px;padding:6px 12px;display:inline-block;margin:8px 0}
 .prod p{font-size:14.5px;color:var(--mut);margin-bottom:6px}
 .tagchip{display:inline-block;font-size:11px;color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:1px 10px;margin-bottom:8px;letter-spacing:.08em}
+@media(max-width:640px){header.site .wrap{flex-wrap:wrap}nav.gnav{width:100%;margin-top:4px}nav.gnav a{margin-left:0;margin-right:14px}.hero{padding:44px 0 30px}.hero h1{font-size:27px}}
 </style>
 </head>
 <body>
@@ -95,7 +96,6 @@ article.post figcaption{font-size:12px;color:var(--mut);padding:8px 10px;backgro
 <li>即興演奏を楽しみたい人（音がぶつかりにくいスケールです）</li>
 <li>低音の厚みと広い音域がほしい人</li>
 </ul>
-<figure><img src="fsharp-low-pygmy-21-sketch-crop.jpg" alt="F# Low Pygmy のスケッチ"><figcaption>F# Low Pygmy のスケッチ</figcaption></figure>
 <h2>リンク</h2>
 <ul>
 <li>スケールの基礎 → <a href="scale-guide.html">ハンドパンのスケールって何？ D Kurdを例に、初めての一台の選び方</a></li>

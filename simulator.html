@@ -1,0 +1,1356 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ハンドパン練習" />
+    <meta name="theme-color" content="#0a0e1a" />
+    <link rel="icon" href="data:," />
+    <title>ハンドパン練習</title>
+    <style>
+      :root {
+        --bg: #070a14;
+        --bg2: #0d1322;
+        --panel: #111a2e;
+        --panel2: #16213a;
+        --line: #26355a;
+        --ink: #eef1f8;
+        --muted: #9aa7c4;
+        --gold: #d9a94a;
+        --gold-bright: #f2c96b;
+        --gold-dim: #8a6c2a;
+        --steel1: #3d465e;
+        --steel2: #232b40;
+        --steel3: #141a2b;
+        --danger: #e06c5a;
+        --backblue: #5b8ec9;
+      }
+      * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        background:
+          radial-gradient(120% 60% at 50% -10%, #16223f 0%, transparent 60%),
+          linear-gradient(180deg, var(--bg2), var(--bg) 55%);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+        min-height: 100dvh;
+        padding: max(env(safe-area-inset-top), 14px) 16px calc(env(safe-area-inset-bottom) + 104px);
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+      }
+      .wrap { max-width: 480px; margin: 0 auto; }
+
+      header { text-align: center; margin-bottom: 14px; }
+      h1 { margin: 0; font-size: 1.55rem; font-weight: 700; letter-spacing: .14em; }
+      h1 .accent { color: var(--gold); }
+      .sub { margin: 5px 0 0; font-size: .8rem; color: var(--muted); letter-spacing: .08em; }
+
+      /* ビュー切替 */
+      .view { display: none; }
+      .view.active { display: block; }
+
+      /* 下部タブバー */
+      .tabbar {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+        display: flex; gap: 2px; padding: 6px 6px calc(env(safe-area-inset-bottom) + 6px);
+        background: rgba(9, 13, 24, .97); border-top: 1px solid var(--line);
+      }
+      .tabbar button {
+        flex: 1; min-height: 52px; border: 0; border-radius: 10px; background: transparent;
+        color: var(--muted); font-family: inherit; font-size: .84rem; font-weight: 700;
+        letter-spacing: .05em; cursor: pointer;
+        display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+      }
+      .tabbar button .dot { width: 5px; height: 5px; border-radius: 50%; background: transparent; }
+      .tabbar button[aria-selected="true"] { color: var(--gold-bright); background: var(--panel2); }
+      .tabbar button[aria-selected="true"] .dot { background: var(--gold); }
+
+      /* 面切替 */
+      .seg {
+        display: flex; background: var(--panel); border: 1px solid var(--line);
+        border-radius: 999px; padding: 4px; margin: 0 auto 16px; max-width: 340px;
+      }
+      .seg button {
+        flex: 1; min-height: 44px; border: 0; border-radius: 999px; background: transparent;
+        color: var(--muted); font-size: 1rem; font-weight: 600; letter-spacing: .1em; cursor: pointer;
+        font-family: inherit;
+      }
+      .seg button[aria-pressed="true"] {
+        background: linear-gradient(180deg, #2a3a5f, #1b2742); color: var(--gold-bright);
+        box-shadow: inset 0 0 0 1px var(--gold-dim);
+      }
+
+      /* パン本体 */
+      .pan-stage { display: flex; justify-content: center; }
+      .pan {
+        position: relative; width: min(94vw, 440px); aspect-ratio: 1 / 1; border-radius: 50%;
+        background:
+          radial-gradient(circle at 34% 28%, #4c5878 0%, transparent 42%),
+          radial-gradient(circle at 50% 50%, var(--steel1) 0%, var(--steel2) 58%, var(--steel3) 88%, #0b0f1c 100%);
+        box-shadow:
+          0 24px 50px rgba(0,0,0,.65),
+          inset 0 2px 6px rgba(255,255,255,.14),
+          inset 0 -18px 34px rgba(0,0,0,.55),
+          0 0 0 1px #39466a;
+      }
+      .pan.mini { width: min(76vw, 300px); }
+      .pan::after {
+        content: ""; position: absolute; inset: 3.5%; border-radius: 50%;
+        border: 2px solid rgba(217,169,74,.35);
+        box-shadow: inset 0 0 0 1px rgba(0,0,0,.35);
+        pointer-events: none;
+      }
+      .field {
+        position: absolute; transform: translate(-50%, -50%);
+        border-radius: 50%; border: 0; cursor: pointer; padding: 0;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        color: var(--ink); font-family: inherit;
+        background: radial-gradient(circle at 50% 42%, #57648a 0%, #39466a 34%, #27324f 62%, #1a2238 100%);
+        box-shadow:
+          inset 0 3px 7px rgba(255,255,255,.20),
+          inset 0 -6px 12px rgba(0,0,0,.5),
+          0 3px 8px rgba(0,0,0,.45);
+        overflow: visible; touch-action: manipulation;
+      }
+      .field .dimple {
+        position: absolute; left: 50%; top: 50%; width: 34%; height: 34%;
+        transform: translate(-50%, -50%); border-radius: 50%;
+        background: radial-gradient(circle at 42% 36%, #6d7ca3, #2c3757 70%);
+        box-shadow: inset 0 2px 4px rgba(0,0,0,.55), 0 1px 2px rgba(255,255,255,.12);
+        pointer-events: none;
+      }
+      .field .kana {
+        position: relative; z-index: 2; font-weight: 700; line-height: 1.05;
+        text-shadow: 0 1px 3px rgba(0,0,0,.7); pointer-events: none;
+      }
+      .field .nname {
+        position: relative; z-index: 2; font-size: .68rem; letter-spacing: .06em;
+        color: #c8d2ea; text-shadow: 0 1px 2px rgba(0,0,0,.8); pointer-events: none;
+      }
+      .pan.mini .field .nname { font-size: .58rem; }
+      .field.ding {
+        background: radial-gradient(circle at 50% 40%, #67759c 0%, #42527a 36%, #2c3a5e 66%, #1c2742 100%);
+        box-shadow:
+          inset 0 4px 10px rgba(255,255,255,.22),
+          inset 0 -8px 16px rgba(0,0,0,.5),
+          0 4px 12px rgba(0,0,0,.5),
+          0 0 0 1px rgba(217,169,74,.35);
+      }
+      .field.ding .kana { color: var(--gold-bright); }
+      .field.hit {
+        box-shadow:
+          inset 0 3px 7px rgba(255,255,255,.25),
+          inset 0 -6px 12px rgba(0,0,0,.4),
+          0 0 0 2px var(--gold-bright),
+          0 0 26px 6px rgba(242,201,107,.55);
+      }
+      .field.target {
+        box-shadow:
+          inset 0 3px 7px rgba(255,255,255,.22),
+          inset 0 -6px 12px rgba(0,0,0,.45),
+          0 0 0 3px var(--gold),
+          0 0 22px 4px rgba(217,169,74,.5);
+        animation: pulse 1s ease-in-out infinite;
+      }
+      .field.chord {
+        box-shadow:
+          inset 0 3px 7px rgba(255,255,255,.22),
+          inset 0 -6px 12px rgba(0,0,0,.45),
+          0 0 0 2px #8fb0dd,
+          0 0 18px 3px rgba(120,160,220,.45);
+      }
+      .field.root {
+        box-shadow:
+          inset 0 3px 7px rgba(255,255,255,.25),
+          inset 0 -6px 12px rgba(0,0,0,.4),
+          0 0 0 3px var(--gold),
+          0 0 26px 6px rgba(217,169,74,.55);
+        animation: pulse 1.4s ease-in-out infinite;
+      }
+      .field.wrong { animation: shake .3s ease; }
+      @keyframes pulse {
+        0%, 100% { filter: brightness(1); }
+        50% { filter: brightness(1.28); }
+      }
+      @keyframes shake {
+        0%, 100% { margin-left: 0; }
+        25% { margin-left: -5px; }
+        75% { margin-left: 5px; }
+      }
+      .ripple {
+        position: absolute; left: 50%; top: 50%; width: 60%; height: 60%;
+        transform: translate(-50%, -50%); border-radius: 50%;
+        border: 2px solid rgba(242,201,107,.85); pointer-events: none; z-index: 3;
+        animation: ripple .65s ease-out forwards;
+      }
+      @keyframes ripple {
+        from { width: 55%; height: 55%; opacity: .95; }
+        to { width: 175%; height: 175%; opacity: 0; }
+      }
+      .gu {
+        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+        width: 23%; height: 23%; border-radius: 50%;
+        background: radial-gradient(circle at 50% 45%, #05070d 0%, #0a0e1a 55%, #232c47 100%);
+        box-shadow: inset 0 6px 14px rgba(0,0,0,.9), 0 1px 2px rgba(255,255,255,.15);
+        display: flex; align-items: center; justify-content: center;
+        color: var(--muted); font-size: .68rem; letter-spacing: .14em; pointer-events: none;
+      }
+
+      /* いまの音 */
+      .now {
+        display: flex; align-items: baseline; justify-content: center; gap: 10px;
+        min-height: 44px; margin: 14px 0 4px;
+      }
+      .now .label { font-size: .78rem; color: var(--muted); letter-spacing: .12em; }
+      .now .val { font-size: 1.5rem; font-weight: 700; color: var(--gold-bright); letter-spacing: .04em; }
+      .now .val small { font-size: .95rem; color: var(--ink); font-weight: 600; margin-left: 6px; }
+
+      .card {
+        background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+        padding: 16px; margin-top: 16px;
+      }
+      .card.first { margin-top: 4px; }
+      h2 {
+        margin: 0 0 4px; font-size: 1.02rem; letter-spacing: .1em; font-weight: 700;
+        display: flex; align-items: center; gap: 8px;
+      }
+      h2::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex: none; }
+      h3 { margin: 14px 0 6px; font-size: .9rem; letter-spacing: .06em; color: var(--ink); }
+      .hint { margin: 0 0 12px; font-size: .8rem; color: var(--muted); line-height: 1.6; }
+      .hint.tight { margin-bottom: 6px; }
+
+      .patterns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+      .patterns button {
+        min-height: 52px; border-radius: 10px; border: 1px solid var(--line);
+        background: var(--panel2); color: var(--ink); font-family: inherit; cursor: pointer;
+        font-size: .95rem; font-weight: 600; letter-spacing: .04em; padding: 6px 4px; line-height: 1.35;
+      }
+      .patterns button small { display: block; font-size: .68rem; color: var(--muted); font-weight: 400; }
+      .patterns button[aria-pressed="true"] {
+        border-color: var(--gold); color: var(--gold-bright);
+        background: linear-gradient(180deg, #2b3350, #1d2742);
+        box-shadow: inset 0 0 0 1px var(--gold-dim);
+      }
+      .btnrow { display: flex; gap: 8px; flex-wrap: wrap; }
+      .btn {
+        flex: 1; min-height: 48px; border-radius: 10px; border: 1px solid var(--line);
+        background: var(--panel2); color: var(--ink); font-family: inherit; cursor: pointer;
+        font-size: .98rem; font-weight: 700; letter-spacing: .05em; padding: 6px 8px;
+      }
+      .btn.primary { background: linear-gradient(180deg, #e3b95c, #c79a35); color: #241a04; border-color: #a87f27; }
+      .btn.rec-on { background: linear-gradient(180deg, #c04a3e, #9c352b); color: #fff; border-color: #7c2a24; }
+      .btn:disabled { opacity: .45; }
+      .mini-btn {
+        min-height: 42px; padding: 0 14px; border-radius: 9px; border: 1px solid var(--line);
+        background: var(--panel); color: var(--ink); font-family: inherit; font-weight: 600;
+        cursor: pointer; font-size: .88rem;
+      }
+      .mini-btn.gold { color: var(--gold-bright); border-color: var(--gold-dim); }
+      .mini-btn:disabled { opacity: .45; }
+      .status { margin: 12px 0 0; min-height: 1.5em; font-size: .92rem; color: var(--gold-bright); text-align: center; letter-spacing: .03em; }
+      .status.plain { color: var(--muted); }
+      .status.left { text-align: left; }
+
+      /* チップ（タブ譜・移調） */
+      .chips {
+        display: flex; flex-wrap: wrap; gap: 6px; min-height: 46px; padding: 9px;
+        border: 1px dashed var(--line); border-radius: 10px; background: rgba(0,0,0,.2);
+        align-items: center; margin-bottom: 12px;
+      }
+      .chips .empty { color: var(--muted); font-size: .82rem; padding: 2px 4px; }
+      .chip {
+        display: inline-flex; align-items: center; gap: 5px;
+        background: var(--panel2); border: 1px solid var(--line); border-radius: 999px;
+        padding: 6px 10px; font-size: .86rem; font-weight: 700; line-height: 1.2;
+      }
+      .chip small { color: var(--muted); font-weight: 400; font-size: .7rem; }
+      .chip.back { border-color: var(--backblue); background: #152a45; }
+      .chip .face-tag {
+        font-size: .6rem; font-weight: 700; background: #2c4a73; color: #d3e7ff;
+        border-radius: 4px; padding: 1px 5px; letter-spacing: .05em;
+      }
+      .chip.changed { border-color: var(--danger); background: #3a1f1c; color: #ffc9bc; }
+      .chip.changed small { color: #e8a294; }
+      .chip.playing { border-color: var(--gold-bright); box-shadow: 0 0 10px rgba(242,201,107,.55); }
+
+      .text-input {
+        width: 100%; min-height: 48px; background: var(--panel2); border: 1px solid var(--line);
+        border-radius: 10px; color: var(--ink); padding: 0 12px; font-size: 1rem; font-family: inherit;
+        user-select: text; -webkit-user-select: text;
+      }
+      .save-row { display: flex; gap: 8px; margin-bottom: 4px; }
+      .save-row .text-input { flex: 1; }
+      .save-row .btn { flex: none; padding: 0 18px; }
+
+      .saved-item {
+        display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+        padding: 10px; border: 1px solid var(--line); border-radius: 10px;
+        background: var(--panel2); margin-top: 8px;
+      }
+      .saved-item .nm { font-weight: 700; flex: 1 1 120px; min-width: 110px; font-size: .95rem; }
+      .saved-item .nm small { display: block; color: var(--muted); font-weight: 400; font-size: .72rem; margin-top: 2px; }
+      .saved-empty { color: var(--muted); font-size: .85rem; padding: 6px 2px; }
+
+      /* 移調：音高入力 */
+      .oct-row { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 12px; }
+      .oct-row .stepper {
+        width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line);
+        background: var(--panel2); color: var(--gold-bright); font-size: 1.35rem; font-weight: 700;
+        cursor: pointer; font-family: inherit; line-height: 1;
+      }
+      .oct-row .oct-val { font-size: 1.15rem; font-weight: 700; min-width: 110px; text-align: center; }
+      .oct-row .oct-val small { color: var(--muted); font-size: .72rem; font-weight: 400; display: block; letter-spacing: .08em; }
+      .pcgrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 6px; }
+      .pcgrid button {
+        min-height: 58px; border-radius: 10px; border: 1px solid var(--line);
+        background: var(--panel2); color: var(--ink); font-family: inherit; cursor: pointer; padding: 5px 2px;
+      }
+      .pcgrid button .pc-kana { display: block; font-size: 1.02rem; font-weight: 700; line-height: 1.25; }
+      .pcgrid button .pc-name { display: block; font-size: .68rem; color: var(--muted); }
+      .pcgrid button.avail { border-color: var(--gold-dim); }
+      .pcgrid button.avail .pc-name { color: var(--gold); }
+      .legend { font-size: .74rem; color: var(--muted); margin: 0 0 12px; line-height: 1.6; }
+      .legend .sw { color: var(--gold); font-weight: 700; }
+
+      /* コード */
+      .chordgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+      .chordgrid button {
+        min-height: 50px; border-radius: 10px; border: 1px solid var(--line);
+        background: var(--panel2); color: var(--ink); font-family: inherit; cursor: pointer;
+        font-size: 1rem; font-weight: 700; letter-spacing: .03em;
+      }
+      .chordgrid button[aria-pressed="true"] {
+        border-color: var(--gold); color: var(--gold-bright);
+        background: linear-gradient(180deg, #2b3350, #1d2742);
+        box-shadow: inset 0 0 0 1px var(--gold-dim);
+      }
+      .chord-info {
+        text-align: center; font-size: .95rem; margin: 0 0 4px; min-height: 1.6em;
+      }
+      .chord-info b { color: var(--gold-bright); font-size: 1.1rem; margin-right: 8px; }
+      .face-label { text-align: center; color: var(--muted); font-size: .8rem; letter-spacing: .14em; margin: 14px 0 8px; }
+      .face-label.blue { color: #a9c8ee; }
+
+      /* メトロノーム */
+      .metro-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+      .bpm-val { font-size: 2rem; font-weight: 700; line-height: 1; }
+      .bpm-val small { font-size: .8rem; color: var(--muted); font-weight: 400; letter-spacing: .1em; margin-left: 4px; }
+      .beats { display: flex; gap: 10px; align-items: center; }
+      .beat { width: 15px; height: 15px; border-radius: 50%; background: #2a3554; transition: background .06s ease, box-shadow .06s ease; }
+      .beat.on { background: #b9c8ee; box-shadow: 0 0 12px 2px rgba(185,200,238,.6); }
+      .beat.on.accent { background: var(--gold-bright); box-shadow: 0 0 14px 3px rgba(242,201,107,.65); }
+      .tempo-row { display: flex; align-items: center; gap: 10px; margin: 14px 0; }
+      .tempo-row .stepper {
+        width: 48px; height: 48px; flex: none; border-radius: 50%;
+        border: 1px solid var(--line); background: var(--panel2); color: var(--gold-bright);
+        font-size: 1.35rem; font-weight: 700; cursor: pointer; font-family: inherit; line-height: 1;
+      }
+      input[type="range"] { flex: 1; appearance: none; -webkit-appearance: none; height: 44px; background: transparent; cursor: pointer; margin: 0; }
+      input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%; margin-top: -11px;
+        background: radial-gradient(circle at 38% 32%, #ffe9b0, var(--gold) 65%, #a87f27);
+        border: 1px solid #7d5f1e; box-shadow: 0 2px 6px rgba(0,0,0,.5);
+      }
+      input[type="range"]::-moz-range-track { height: 6px; border-radius: 3px; background: var(--gold-dim); }
+      input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--gold); border: 1px solid #7d5f1e; }
+
+      footer { margin-top: 18px; text-align: center; }
+      footer p { margin: 0; font-size: .76rem; color: var(--muted); line-height: 1.7; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .field.target, .field.root { animation: none; }
+        .ripple { animation-duration: .01s; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>ハンドパン<span class="accent">練習</span></h1>
+        <p class="sub">Yishama F3 Pygmy 19 ・ あなたの実機の配置そのまま</p>
+      </header>
+
+      <!-- ===== 演奏 ===== -->
+      <div class="view active" id="view-play">
+        <div class="seg" id="segPlay">
+          <button type="button">表面（おもて）</button>
+          <button type="button">裏面（うら）</button>
+        </div>
+        <div class="pan-stage"><div class="pan" id="panPlay"></div></div>
+        <div class="now" aria-live="polite">
+          <span class="label">いまの音</span>
+          <span class="val" id="nowNote">—</span>
+        </div>
+        <footer>
+          <p>iPhoneでは 共有ボタン →「ホーム画面に追加」で、アプリのように開けます。</p>
+        </footer>
+      </div>
+
+      <!-- ===== 練習 ===== -->
+      <div class="view" id="view-practice">
+        <div class="seg" id="segPractice">
+          <button type="button">表面（おもて）</button>
+          <button type="button">裏面（うら）</button>
+        </div>
+        <div class="pan-stage"><div class="pan" id="panPractice"></div></div>
+        <div class="card">
+          <h2>練習モード</h2>
+          <p class="hint">パターンを選んで「お手本を聴く」か「ガイド演奏」。ガイドでは次に叩く音板が金色に光ります。正しく叩くと次へ進みます。タブ譜で保存したフレーズは、タブ譜タブの「ガイド」から読み込めます。</p>
+          <div class="patterns" id="patterns"></div>
+          <div class="btnrow">
+            <button type="button" class="btn" id="demoBtn">お手本を聴く</button>
+            <button type="button" class="btn primary" id="guideBtn">ガイド演奏</button>
+            <button type="button" class="btn" id="stopBtn" disabled>止める</button>
+          </div>
+          <p class="status plain" id="practiceStatus">パターンを選んでください</p>
+        </div>
+      </div>
+
+      <!-- ===== タブ譜 ===== -->
+      <div class="view" id="view-tab">
+        <div class="seg" id="segTab">
+          <button type="button">表面（おもて）</button>
+          <button type="button">裏面（うら）</button>
+        </div>
+        <div class="pan-stage"><div class="pan" id="panTab"></div></div>
+        <div class="card">
+          <h2>タブ譜エディタ</h2>
+          <p class="hint">「記録する」を押してから音板を叩くと、叩いた順にフレーズが記録されます。裏面の音は青いチップに「裏」の印が付きます。</p>
+          <div class="btnrow" style="margin-bottom:12px;">
+            <button type="button" class="btn" id="recBtn" aria-pressed="false">● 記録する</button>
+            <button type="button" class="btn primary" id="phrasePlayBtn">再生</button>
+            <button type="button" class="btn" id="phraseStopBtn">停止</button>
+          </div>
+          <div class="chips" id="phraseChips"><span class="empty">まだ記録がありません</span></div>
+          <div class="btnrow">
+            <button type="button" class="btn" id="phraseUndoBtn">1つ戻す</button>
+            <button type="button" class="btn" id="phraseClearBtn">全消去</button>
+          </div>
+          <h3>名前を付けて保存</h3>
+          <div class="save-row">
+            <input type="text" class="text-input" id="phraseName" placeholder="フレーズ名（例：朝の練習）" autocomplete="off" />
+            <button type="button" class="btn primary" id="phraseSaveBtn">保存</button>
+          </div>
+          <p class="status left plain" id="tabStatus"></p>
+          <p class="hint tight" id="storageNote" hidden>※この環境では端末への保存ができないため、フレーズはこのアプリを開いている間だけ保持されます。</p>
+          <h3>保存したフレーズ</h3>
+          <div id="savedList"></div>
+        </div>
+      </div>
+
+      <!-- ===== 移調 ===== -->
+      <div class="view" id="view-transpose">
+        <div class="card first">
+          <h2>移調ツール</h2>
+          <p class="hint">他の楽器や歌の旋律を、音を選んで入力してください。「自分の楽器に変換」を押すと、あなたの F Pygmy（ファ・ソ・♭ラ・♭シ・ド・♭レ・♭ミ）で出せる一番近い音に寄せて変換します。</p>
+          <div class="oct-row">
+            <button type="button" class="stepper" id="octDown" aria-label="オクターブを下げる">−</button>
+            <div class="oct-val"><small>オクターブ</small><span id="octVal">4</span></div>
+            <button type="button" class="stepper" id="octUp" aria-label="オクターブを上げる">＋</button>
+          </div>
+          <div class="pcgrid" id="pcGrid"></div>
+          <p class="legend"><span class="sw">金色の枠</span>は、あなたの楽器でそのまま出せる音です。それ以外は変換で近い音に寄ります。</p>
+          <h3>入力した旋律</h3>
+          <div class="chips" id="melodyChips"><span class="empty">まだ入力がありません。上の音をタップしてください</span></div>
+          <div class="btnrow">
+            <button type="button" class="btn" id="melUndoBtn">1つ戻す</button>
+            <button type="button" class="btn" id="melClearBtn">全消去</button>
+            <button type="button" class="btn" id="melPlayBtn">入力を再生</button>
+          </div>
+          <div class="btnrow" style="margin-top:8px;">
+            <button type="button" class="btn primary" id="convertBtn">自分の楽器（F Pygmy）に変換</button>
+          </div>
+          <div id="convertResult" hidden>
+            <h3>変換前</h3>
+            <div class="chips" id="beforeChips"></div>
+            <h3>変換後（あなたの楽器で弾けます）</h3>
+            <div class="chips" id="afterChips"></div>
+            <p class="status left" id="convertStatus"></p>
+            <div class="btnrow">
+              <button type="button" class="btn primary" id="afterPlayBtn">変換後を再生</button>
+              <button type="button" class="btn" id="sendToTabBtn">タブ譜へ送る</button>
+            </div>
+          </div>
+        </div>
+        <div class="pan-stage" style="margin-top:16px;"><div class="pan" id="panTranspose"></div></div>
+        <p class="hint" style="text-align:center;margin-top:8px;">変換後の再生では、こちらの音板が光ります（表面・裏面は自動で切り替わります）。</p>
+      </div>
+
+      <!-- ===== コード ===== -->
+      <div class="view" id="view-chord">
+        <div class="card first">
+          <h2>コード表示</h2>
+          <p class="hint">コードを選ぶと、そのコードの音が低い音から順に鳴り、構成音の音板が表面・裏面の両方で光ります。ルート音（根音）は金色に強く光ります。光った音板はタップしても鳴らせます。</p>
+          <div class="chordgrid" id="chordGrid"></div>
+          <p class="chord-info" id="chordInfo">コードを選んでください</p>
+        </div>
+        <p class="face-label">表面（おもて）</p>
+        <div class="pan-stage"><div class="pan mini" id="panChordF"></div></div>
+        <p class="face-label blue">裏面（うら）</p>
+        <div class="pan-stage"><div class="pan mini" id="panChordB"></div></div>
+      </div>
+
+      <!-- ===== メトロノーム ===== -->
+      <div class="view" id="view-metro">
+        <div class="card first">
+          <h2>メトロノーム</h2>
+          <div class="metro-top">
+            <div class="bpm-val"><span id="bpmVal">60</span><small>BPM</small></div>
+            <div class="beats" aria-hidden="true">
+              <span class="beat" id="beat0"></span>
+              <span class="beat" id="beat1"></span>
+              <span class="beat" id="beat2"></span>
+              <span class="beat" id="beat3"></span>
+            </div>
+          </div>
+          <div class="tempo-row">
+            <button type="button" class="stepper" id="bpmDown" aria-label="テンポを下げる">−</button>
+            <input type="range" id="bpm" min="40" max="120" step="1" value="60" aria-label="テンポ（BPM）" />
+            <button type="button" class="stepper" id="bpmUp" aria-label="テンポを上げる">＋</button>
+          </div>
+          <div class="btnrow">
+            <button type="button" class="btn primary" id="metroBtn">メトロノーム開始</button>
+          </div>
+          <p class="hint" style="margin:10px 0 0;">テンポは「お手本を聴く」やフレーズ再生の速度にも反映されます。ゆっくりめが心地よい楽器です。</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="tabbar" aria-label="画面切り替え">
+      <button type="button" data-tab="play" aria-selected="true"><span>演奏</span><span class="dot"></span></button>
+      <button type="button" data-tab="practice" aria-selected="false"><span>練習</span><span class="dot"></span></button>
+      <button type="button" data-tab="tab" aria-selected="false"><span>タブ譜</span><span class="dot"></span></button>
+      <button type="button" data-tab="transpose" aria-selected="false"><span>移調</span><span class="dot"></span></button>
+      <button type="button" data-tab="chord" aria-selected="false"><span>コード</span><span class="dot"></span></button>
+      <button type="button" data-tab="metro" aria-selected="false"><span>テンポ</span><span class="dot"></span></button>
+    </nav>
+
+    <script>
+      "use strict";
+
+      /* ===== 楽器データ（実機 Yishama F3 Pygmy 19・確定配置） ===== */
+      /* カタカナは固定ド: C=ド Db=♭レ Eb=♭ミ F=ファ G=ソ Ab=♭ラ Bb=♭シ */
+      var FRONT = [
+        { id: "F3",  kana: "ファ", freq: 174.61, midi: 53, x: 50.0, y: 50.0, size: 33, ding: true },
+        { id: "G3",  kana: "ソ",   freq: 196.00, midi: 55, x: 61.6, y: 82.0, size: 22 },
+        { id: "Ab3", kana: "♭ラ",  freq: 207.65, midi: 56, x: 38.4, y: 82.0, size: 22 },
+        { id: "C4",  kana: "ド",   freq: 261.63, midi: 60, x: 77.8, y: 69.5, size: 22 },
+        { id: "Eb4", kana: "♭ミ",  freq: 311.13, midi: 63, x: 22.2, y: 69.5, size: 22 },
+        { id: "F4",  kana: "ファ", freq: 349.23, midi: 65, x: 83.9, y: 53.0, size: 22 },
+        { id: "G4",  kana: "ソ",   freq: 392.00, midi: 67, x: 16.1, y: 53.0, size: 22 },
+        { id: "Ab4", kana: "♭ラ",  freq: 415.30, midi: 68, x: 80.8, y: 35.6, size: 22 },
+        { id: "C5",  kana: "ド",   freq: 523.25, midi: 72, x: 19.2, y: 35.6, size: 22 },
+        { id: "Eb5", kana: "♭ミ",  freq: 622.25, midi: 75, x: 50.0, y: 16.0, size: 22 },
+        { id: "F5",  kana: "ファ", freq: 698.46, midi: 77, x: 36.5, y: 32.0, size: 19 },
+        { id: "G5",  kana: "ソ",   freq: 783.99, midi: 79, x: 63.5, y: 32.0, size: 19 }
+      ];
+      var BACK = [
+        { id: "Db3", kana: "♭レ", freq: 138.59, midi: 49, x: 71.0, y: 77.0, size: 26 },
+        { id: "Eb3", kana: "♭ミ", freq: 155.56, midi: 51, x: 29.0, y: 77.0, size: 26 },
+        { id: "Db4", kana: "♭レ", freq: 277.18, midi: 61, x: 15.0, y: 47.0, size: 22 },
+        { id: "Bb3", kana: "♭シ", freq: 233.08, midi: 58, x: 85.0, y: 47.0, size: 18 },
+        { id: "Ab5", kana: "♭ラ", freq: 830.61, midi: 80, x: 27.0, y: 19.0, size: 21 },
+        { id: "Bb5", kana: "♭シ", freq: 932.33, midi: 82, x: 73.0, y: 19.0, size: 21 },
+        { id: "C6",  kana: "ド",   freq: 1046.50, midi: 84, x: 50.0, y: 11.0, size: 20 }
+      ];
+      FRONT.forEach(function (n) { n.face = "front"; });
+      BACK.forEach(function (n) { n.face = "back"; });
+      var ALL_NOTES = FRONT.concat(BACK);
+      var NOTE_MAP = {};
+      ALL_NOTES.forEach(function (n) { NOTE_MAP[n.id] = n; });
+
+      /* 12音高クラス（固定ド） */
+      var PCS = [
+        { name: "C", kana: "ド" }, { name: "Db", kana: "♭レ" }, { name: "D", kana: "レ" },
+        { name: "Eb", kana: "♭ミ" }, { name: "E", kana: "ミ" }, { name: "F", kana: "ファ" },
+        { name: "F#", kana: "♯ファ" }, { name: "G", kana: "ソ" }, { name: "Ab", kana: "♭ラ" },
+        { name: "A", kana: "ラ" }, { name: "Bb", kana: "♭シ" }, { name: "B", kana: "シ" }
+      ];
+      var AVAIL_PC = { 0: true, 1: true, 3: true, 5: true, 7: true, 8: true, 10: true }; // C Db Eb F G Ab Bb
+
+      var PATTERNS = [
+        { key: "scale", name: "スケール往復", sub: "表面・全12音のぼって・おりる",
+          notes: ["F3","G3","Ab3","C4","Eb4","F4","G4","Ab4","C5","Eb5","F5","G5","Eb5","C5","Ab4","G4","F4","Eb4","C4","Ab3","G3","F3"], loop: false },
+        { key: "loop", name: "基本ループ", sub: "表面・8音を繰り返し",
+          notes: ["F3","G3","C4","F4","Ab4","F4","C4","G3"], loop: true },
+        { key: "yurikago", name: "ゆりかご", sub: "表面・ゆったり6音",
+          notes: ["F3","Ab3","Eb4","C4","Ab3","G3"], loop: false },
+        { key: "drone", name: "裏面ドローン", sub: "裏面・低い響きから高く",
+          notes: ["Db3","Eb3","Db4","Bb3","Db3","Eb3","Ab5","Bb5","C6"], loop: false }
+      ];
+
+      var CHORDS = [
+        { name: "Fm",     root: 5,  pcs: [5, 8, 0] },
+        { name: "Fm7",    root: 5,  pcs: [5, 8, 0, 3] },
+        { name: "Ab",     root: 8,  pcs: [8, 0, 3] },
+        { name: "Abmaj7", root: 8,  pcs: [8, 0, 3, 7] },
+        { name: "Db",     root: 1,  pcs: [1, 5, 8] },
+        { name: "Dbmaj7", root: 1,  pcs: [1, 5, 8, 0] },
+        { name: "Eb",     root: 3,  pcs: [3, 7, 10] },
+        { name: "Eb7",    root: 3,  pcs: [3, 7, 10, 1] },
+        { name: "Bbm",    root: 10, pcs: [10, 1, 5] },
+        { name: "Bbm7",   root: 10, pcs: [10, 1, 5, 8] },
+        { name: "Cm",     root: 0,  pcs: [0, 3, 7] },
+        { name: "Cm7",    root: 0,  pcs: [0, 3, 7, 10] }
+      ];
+
+      /* ===== 共通状態 ===== */
+      var bpm = 60;
+
+      /* ===== Audio ===== */
+      var actx = null, master = null;
+      function ensureAudio() {
+        if (!actx) {
+          var AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return false;
+          actx = new AC();
+          master = actx.createGain();
+          master.gain.value = 0.9;
+          var comp = actx.createDynamicsCompressor();
+          comp.threshold.value = -18; comp.ratio.value = 6;
+          master.connect(comp); comp.connect(actx.destination);
+        }
+        if (actx.state === "suspended") actx.resume();
+        return true;
+      }
+
+      function playNote(freq) {
+        if (!ensureAudio()) return;
+        var t = actx.currentTime;
+        var baseDecay = Math.min(4.2, Math.max(1.8, 700 / freq));
+        var partials = [
+          { ratio: 1.0, gain: 1.00, decay: baseDecay },
+          { ratio: 2.0, gain: 0.48, decay: baseDecay * 0.62 },
+          { ratio: 3.0, gain: 0.20, decay: baseDecay * 0.38 },
+          { ratio: 4.2, gain: 0.07, decay: baseDecay * 0.22 }
+        ];
+        var out = actx.createGain();
+        out.gain.value = 0.5;
+        out.connect(master);
+        partials.forEach(function (p) {
+          var osc = actx.createOscillator();
+          osc.type = "sine";
+          osc.frequency.value = freq * p.ratio;
+          var g = actx.createGain();
+          g.gain.setValueAtTime(0, t);
+          g.gain.linearRampToValueAtTime(p.gain, t + 0.006);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + p.decay);
+          osc.connect(g); g.connect(out);
+          osc.start(t); osc.stop(t + p.decay + 0.1);
+        });
+        var nb = actx.createBuffer(1, Math.floor(actx.sampleRate * 0.03), actx.sampleRate);
+        var d = nb.getChannelData(0);
+        for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
+        var src = actx.createBufferSource(); src.buffer = nb;
+        var bp = actx.createBiquadFilter(); bp.type = "bandpass";
+        bp.frequency.value = Math.min(4000, freq * 6); bp.Q.value = 0.9;
+        var ng = actx.createGain(); ng.gain.value = 0.16;
+        src.connect(bp); bp.connect(ng); ng.connect(master);
+        src.start(t);
+      }
+
+      function playClick(accent) {
+        if (!ensureAudio()) return;
+        var t = actx.currentTime;
+        var osc = actx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = accent ? 1560 : 1040;
+        var g = actx.createGain();
+        g.gain.setValueAtTime(accent ? 0.32 : 0.2, t);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
+        osc.connect(g); g.connect(master);
+        osc.start(t); osc.stop(t + 0.09);
+      }
+
+      /* ===== パン（楽器）コンポーネント ===== */
+      function flashEl(el) {
+        if (!el) return;
+        el.classList.remove("hit");
+        void el.offsetWidth;
+        el.classList.add("hit");
+        var r = document.createElement("span");
+        r.className = "ripple";
+        el.appendChild(r);
+        setTimeout(function () { if (r.parentNode) r.parentNode.removeChild(r); }, 700);
+        setTimeout(function () { el.classList.remove("hit"); }, 320);
+      }
+
+      function createPan(container, opts) {
+        opts = opts || {};
+        var face = opts.face || "front";
+        var els = {};
+        var chordState = null; // {set:{pc:true}, root:pc}
+
+        var api = {
+          getFace: function () { return face; },
+          setFace: function (f) { if (face !== f) { face = f; build(); } },
+          flash: function (id) { flashEl(els[id]); },
+          el: function (id) { return els[id]; },
+          setTarget: function (id) {
+            Object.keys(els).forEach(function (k) { els[k].classList.remove("target"); });
+            if (id && els[id]) els[id].classList.add("target");
+          },
+          wrong: function (id) {
+            var el = els[id];
+            if (!el) return;
+            el.classList.remove("wrong");
+            void el.offsetWidth;
+            el.classList.add("wrong");
+          },
+          setChord: function (set, root) {
+            chordState = set ? { set: set, root: root } : null;
+            applyChord();
+          }
+        };
+
+        function applyChord() {
+          Object.keys(els).forEach(function (id) {
+            var el = els[id];
+            el.classList.remove("chord", "root");
+            if (!chordState) return;
+            var pc = NOTE_MAP[id].midi % 12;
+            if (pc === chordState.root) el.classList.add("root");
+            else if (chordState.set[pc]) el.classList.add("chord");
+          });
+        }
+
+        function syncSeg() {
+          if (!opts.seg) return;
+          var btns = opts.seg.querySelectorAll("button");
+          if (btns[0]) btns[0].setAttribute("aria-pressed", face === "front" ? "true" : "false");
+          if (btns[1]) btns[1].setAttribute("aria-pressed", face === "back" ? "true" : "false");
+        }
+
+        function build() {
+          container.innerHTML = "";
+          els = {};
+          var notes = face === "front" ? FRONT : BACK;
+          notes.forEach(function (n) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "field" + (n.ding ? " ding" : "");
+            b.style.left = n.x + "%";
+            b.style.top = n.y + "%";
+            b.style.width = n.size + "%";
+            b.style.height = n.size + "%";
+            b.setAttribute("aria-label", n.kana + " " + n.id);
+            var kanaSize = n.ding ? "1.55rem" : (n.size <= 18 ? "0.95rem" : (n.size >= 26 ? "1.3rem" : "1.12rem"));
+            if (container.classList.contains("mini")) kanaSize = n.ding ? "1.1rem" : "0.85rem";
+            b.innerHTML = '<span class="dimple"></span>' +
+              '<span class="kana" style="font-size:' + kanaSize + '">' + n.kana + "</span>" +
+              '<span class="nname">' + n.id + "</span>";
+            b.addEventListener("pointerdown", function (ev) {
+              ev.preventDefault();
+              playNote(n.freq);
+              api.flash(n.id);
+              if (opts.onTap) opts.onTap(n, api);
+            });
+            container.appendChild(b);
+            els[n.id] = b;
+          });
+          if (face === "back") {
+            var gu = document.createElement("div");
+            gu.className = "gu";
+            gu.textContent = "GU";
+            container.appendChild(gu);
+          }
+          syncSeg();
+          applyChord();
+          if (opts.onRender) opts.onRender(api);
+        }
+
+        if (opts.seg) {
+          var segBtns = opts.seg.querySelectorAll("button");
+          if (segBtns[0]) segBtns[0].addEventListener("click", function () { api.setFace("front"); });
+          if (segBtns[1]) segBtns[1].addEventListener("click", function () { api.setFace("back"); });
+        }
+
+        build();
+        return api;
+      }
+
+      /* ===== シーケンス再生（音IDの並びをパンで光らせながら再生） ===== */
+      var seqCounter = 0;
+      function stopSequences() { seqCounter++; }
+      function playIds(pan, ids, opts) {
+        opts = opts || {};
+        var my = ++seqCounter;
+        var i = 0;
+        var interval = opts.interval || (60000 / bpm);
+        function step() {
+          if (my !== seqCounter) return;
+          if (i >= ids.length) { if (opts.onDone) opts.onDone(); return; }
+          var id = ids[i];
+          var n = NOTE_MAP[id];
+          if (pan && n) {
+            pan.setFace(n.face);
+            playNote(n.freq);
+            pan.flash(id);
+          }
+          if (opts.onStep) opts.onStep(n, i, ids.length);
+          i++;
+          setTimeout(step, interval);
+        }
+        step();
+      }
+      /* 周波数の並びを再生（移調前の旋律用）。chipsElがあれば順に光らせる */
+      function playFreqs(freqs, chipEls) {
+        var my = ++seqCounter;
+        var i = 0;
+        var interval = 60000 / bpm;
+        function step() {
+          if (my !== seqCounter) return;
+          if (chipEls) chipEls.forEach(function (c) { c.classList.remove("playing"); });
+          if (i >= freqs.length) return;
+          playNote(freqs[i]);
+          if (chipEls && chipEls[i]) chipEls[i].classList.add("playing");
+          i++;
+          setTimeout(step, interval);
+        }
+        step();
+      }
+
+      /* ===== タブ切り替え ===== */
+      var tabBtns = document.querySelectorAll(".tabbar button");
+      function selectTab(key) {
+        stopSequences();
+        if (typeof stopPractice === "function") stopPractice();
+        tabBtns.forEach(function (b) {
+          b.setAttribute("aria-selected", b.dataset.tab === key ? "true" : "false");
+        });
+        ["play", "practice", "tab", "transpose", "chord", "metro"].forEach(function (k) {
+          document.getElementById("view-" + k).classList.toggle("active", k === key);
+        });
+        window.scrollTo(0, 0);
+      }
+      tabBtns.forEach(function (b) {
+        b.addEventListener("click", function () { selectTab(b.dataset.tab); });
+      });
+
+      /* ===== 演奏タブ ===== */
+      var nowEl = document.getElementById("nowNote");
+      var playPan = createPan(document.getElementById("panPlay"), {
+        seg: document.getElementById("segPlay"),
+        onTap: function (n) {
+          nowEl.innerHTML = n.kana + "<small>" + n.id + (n.face === "back" ? "（裏）" : "") + "</small>";
+        }
+      });
+
+      /* ===== 練習タブ ===== */
+      var practicePan = createPan(document.getElementById("panPractice"), {
+        seg: document.getElementById("segPractice"),
+        onRender: function () { if (mode === "guide") markTarget(); },
+        onTap: function (n) {
+          if (mode !== "guide" || !currentPattern) return;
+          var expected = currentPattern.notes[guideIndex];
+          if (n.id === expected) {
+            advanceGuide();
+          } else {
+            practicePan.wrong(n.id);
+            var en = NOTE_MAP[expected];
+            setPStatus("次は「" + en.kana + " " + expected + "」です", false);
+          }
+        }
+      });
+
+      var mode = "free"; // free | demo | guide
+      var currentPattern = null;
+      var guideIndex = 0;
+      var guideCycles = 0;
+
+      var pStatusEl = document.getElementById("practiceStatus");
+      var demoBtn = document.getElementById("demoBtn");
+      var guideBtn = document.getElementById("guideBtn");
+      var stopBtn = document.getElementById("stopBtn");
+      function setPStatus(text, plain) {
+        pStatusEl.textContent = text;
+        pStatusEl.className = "status" + (plain ? " plain" : "");
+      }
+      function setControls() {
+        var active = mode === "demo" || mode === "guide";
+        demoBtn.disabled = active;
+        guideBtn.disabled = active;
+        stopBtn.disabled = !active;
+      }
+      function stopPractice() {
+        if (mode === "free") { setControls(); return; }
+        mode = "free";
+        stopSequences();
+        practicePan.setTarget(null);
+        setControls();
+      }
+
+      var patternsEl = document.getElementById("patterns");
+      PATTERNS.forEach(function (p) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.setAttribute("aria-pressed", "false");
+        b.dataset.key = p.key;
+        b.innerHTML = p.name + "<small>" + p.sub + "</small>";
+        b.addEventListener("click", function () { selectPattern(p); });
+        patternsEl.appendChild(b);
+      });
+      function markPatternButtons(key) {
+        Array.prototype.forEach.call(patternsEl.children, function (c) {
+          c.setAttribute("aria-pressed", c.dataset.key === key ? "true" : "false");
+        });
+      }
+      function selectPattern(p) {
+        stopPractice();
+        currentPattern = p;
+        markPatternButtons(p.key || "");
+        practicePan.setFace(NOTE_MAP[p.notes[0]].face);
+        setPStatus("「" + p.name + "」：" + p.notes.length + "音。お手本かガイドを選んでください", true);
+      }
+
+      demoBtn.addEventListener("click", function () {
+        if (!currentPattern) { setPStatus("先にパターンを選んでください", false); return; }
+        ensureAudio();
+        mode = "demo";
+        setControls();
+        var cyc = 0;
+        (function cycle() {
+          if (mode !== "demo") return;
+          playIds(practicePan, currentPattern.notes, {
+            onStep: function (n, i, total) {
+              setPStatus("お手本「" + currentPattern.name + "」再生中 " + (i + 1) + " / " + total, true);
+            },
+            onDone: function () {
+              if (mode !== "demo") return;
+              cyc++;
+              if (currentPattern.loop) {
+                setPStatus("お手本「" + currentPattern.name + "」" + cyc + "周目が終わりました（繰り返し中）", true);
+                cycle();
+              } else {
+                setPStatus("お手本「" + currentPattern.name + "」を再生しました", true);
+                stopPractice();
+              }
+            }
+          });
+        })();
+      });
+
+      guideBtn.addEventListener("click", function () {
+        if (!currentPattern) { setPStatus("先にパターンを選んでください", false); return; }
+        startGuide();
+      });
+      function startGuide() {
+        ensureAudio();
+        stopSequences();
+        mode = "guide";
+        guideIndex = 0;
+        guideCycles = 0;
+        setControls();
+        markTarget();
+        var n = NOTE_MAP[currentPattern.notes[0]];
+        setPStatus("ガイド開始：光っている「" + n.kana + " " + n.id + "」を叩いてください", false);
+      }
+      function markTarget() {
+        if (mode !== "guide" || !currentPattern) return;
+        var id = currentPattern.notes[guideIndex];
+        practicePan.setFace(NOTE_MAP[id].face);
+        practicePan.setTarget(id);
+      }
+      function advanceGuide() {
+        guideIndex++;
+        var total = currentPattern.notes.length;
+        if (guideIndex >= total) {
+          if (currentPattern.loop) {
+            guideIndex = 0;
+            guideCycles++;
+            setPStatus("「" + currentPattern.name + "」" + guideCycles + "周できました！そのまま続けてください", false);
+            markTarget();
+          } else {
+            var name = currentPattern.name;
+            stopPractice();
+            setPStatus("「" + name + "」最後までできました！よくできました", false);
+          }
+          return;
+        }
+        var n = NOTE_MAP[currentPattern.notes[guideIndex]];
+        setPStatus(guideIndex + " / " + total + " ・ 次は「" + n.kana + " " + n.id + "」", true);
+        markTarget();
+      }
+      stopBtn.addEventListener("click", function () {
+        stopPractice();
+        setPStatus("止めました。自由に叩いてください", true);
+      });
+      setControls();
+
+      /* ===== 保存ストレージ（localStorage、不可ならセッション内保持） ===== */
+      var storageOK = false;
+      try {
+        window.localStorage.setItem("__hp_test__", "1");
+        window.localStorage.removeItem("__hp_test__");
+        storageOK = true;
+      } catch (e) { storageOK = false; }
+      var LS_KEY = "handpanPractice.phrases.v1";
+      var phrases = [];
+      if (storageOK) {
+        try {
+          var raw = window.localStorage.getItem(LS_KEY);
+          if (raw) phrases = JSON.parse(raw) || [];
+        } catch (e) { phrases = []; }
+      }
+      function persistPhrases() {
+        if (!storageOK) return;
+        try { window.localStorage.setItem(LS_KEY, JSON.stringify(phrases)); } catch (e) {}
+      }
+      if (!storageOK) document.getElementById("storageNote").hidden = false;
+
+      /* ===== タブ譜タブ ===== */
+      var phrase = []; // 編集中のフレーズ（音IDの並び）
+      var recOn = false;
+      var phraseChipsEl = document.getElementById("phraseChips");
+      var tabStatusEl = document.getElementById("tabStatus");
+      function setTabStatus(t) { tabStatusEl.textContent = t; }
+
+      var tabPan = createPan(document.getElementById("panTab"), {
+        seg: document.getElementById("segTab"),
+        onTap: function (n) {
+          if (!recOn) return;
+          phrase.push(n.id);
+          renderPhraseChips();
+          setTabStatus("記録中：" + phrase.length + "音");
+        }
+      });
+
+      function chipFor(id) {
+        var n = NOTE_MAP[id];
+        var s = document.createElement("span");
+        s.className = "chip" + (n.face === "back" ? " back" : "");
+        s.innerHTML = (n.face === "back" ? '<span class="face-tag">裏</span>' : "") +
+          n.kana + "<small>" + n.id + "</small>";
+        return s;
+      }
+      function renderPhraseChips() {
+        phraseChipsEl.innerHTML = "";
+        if (!phrase.length) {
+          phraseChipsEl.innerHTML = '<span class="empty">まだ記録がありません</span>';
+          return;
+        }
+        phrase.forEach(function (id) { phraseChipsEl.appendChild(chipFor(id)); });
+      }
+
+      var recBtn = document.getElementById("recBtn");
+      recBtn.addEventListener("click", function () {
+        recOn = !recOn;
+        recBtn.setAttribute("aria-pressed", recOn ? "true" : "false");
+        recBtn.classList.toggle("rec-on", recOn);
+        recBtn.textContent = recOn ? "■ 記録を止める" : "● 記録する";
+        setTabStatus(recOn ? "記録中です。音板を叩いてください" : "記録を止めました（" + phrase.length + "音）");
+      });
+      document.getElementById("phrasePlayBtn").addEventListener("click", function () {
+        if (!phrase.length) { setTabStatus("再生するフレーズがありません"); return; }
+        ensureAudio();
+        playIds(tabPan, phrase.slice(), {
+          onDone: function () { setTabStatus("再生が終わりました"); }
+        });
+        setTabStatus("再生中…（" + phrase.length + "音）");
+      });
+      document.getElementById("phraseStopBtn").addEventListener("click", function () {
+        stopSequences();
+        setTabStatus("再生を止めました");
+      });
+      document.getElementById("phraseUndoBtn").addEventListener("click", function () {
+        phrase.pop();
+        renderPhraseChips();
+        setTabStatus(phrase.length ? "1つ戻しました（" + phrase.length + "音）" : "フレーズは空です");
+      });
+      document.getElementById("phraseClearBtn").addEventListener("click", function () {
+        phrase = [];
+        renderPhraseChips();
+        setTabStatus("全て消去しました");
+      });
+      document.getElementById("phraseSaveBtn").addEventListener("click", function () {
+        if (!phrase.length) { setTabStatus("保存するフレーズがありません"); return; }
+        var nameInput = document.getElementById("phraseName");
+        var name = nameInput.value.trim();
+        if (!name) name = "フレーズ" + (phrases.length + 1);
+        phrases.push({ name: name, notes: phrase.slice() });
+        persistPhrases();
+        renderSavedList();
+        nameInput.value = "";
+        setTabStatus("「" + name + "」を保存しました");
+      });
+
+      var savedListEl = document.getElementById("savedList");
+      function renderSavedList() {
+        savedListEl.innerHTML = "";
+        if (!phrases.length) {
+          savedListEl.innerHTML = '<p class="saved-empty">まだ保存したフレーズはありません</p>';
+          return;
+        }
+        phrases.forEach(function (ph, idx) {
+          var row = document.createElement("div");
+          row.className = "saved-item";
+          var nm = document.createElement("div");
+          nm.className = "nm";
+          nm.innerHTML = "";
+          nm.appendChild(document.createTextNode(ph.name));
+          var sm = document.createElement("small");
+          sm.textContent = ph.notes.length + "音 ・ " + ph.notes.map(function (id) { return NOTE_MAP[id].kana; }).join(" ");
+          nm.appendChild(sm);
+          row.appendChild(nm);
+
+          var playB = document.createElement("button");
+          playB.type = "button"; playB.className = "mini-btn gold"; playB.textContent = "再生";
+          playB.addEventListener("click", function () {
+            phrase = ph.notes.slice();
+            renderPhraseChips();
+            ensureAudio();
+            playIds(tabPan, phrase.slice(), {});
+            setTabStatus("「" + ph.name + "」を再生中");
+          });
+          var guideB = document.createElement("button");
+          guideB.type = "button"; guideB.className = "mini-btn gold"; guideB.textContent = "ガイド";
+          guideB.addEventListener("click", function () {
+            selectTab("practice");
+            stopPractice();
+            currentPattern = { key: "", name: ph.name, notes: ph.notes.slice(), loop: false };
+            markPatternButtons("");
+            startGuide();
+          });
+          var loadB = document.createElement("button");
+          loadB.type = "button"; loadB.className = "mini-btn"; loadB.textContent = "読み込む";
+          loadB.addEventListener("click", function () {
+            phrase = ph.notes.slice();
+            renderPhraseChips();
+            setTabStatus("「" + ph.name + "」を読み込みました");
+          });
+          var delB = document.createElement("button");
+          delB.type = "button"; delB.className = "mini-btn"; delB.textContent = "削除";
+          delB.addEventListener("click", function () {
+            phrases.splice(idx, 1);
+            persistPhrases();
+            renderSavedList();
+            setTabStatus("「" + ph.name + "」を削除しました");
+          });
+          row.appendChild(playB);
+          row.appendChild(guideB);
+          row.appendChild(loadB);
+          row.appendChild(delB);
+          savedListEl.appendChild(row);
+        });
+      }
+      renderPhraseChips();
+      renderSavedList();
+
+      /* ===== 移調タブ ===== */
+      var melody = [];        // 入力した旋律（MIDI番号の並び）
+      var inputOctave = 4;
+      var converted = null;   // {ids:[], changed:[]}
+      var octValEl = document.getElementById("octVal");
+      var melodyChipsEl = document.getElementById("melodyChips");
+
+      var transposePan = createPan(document.getElementById("panTranspose"), {});
+
+      var pcGrid = document.getElementById("pcGrid");
+      PCS.forEach(function (pc, idx) {
+        var b = document.createElement("button");
+        b.type = "button";
+        if (AVAIL_PC[idx]) b.className = "avail";
+        b.innerHTML = '<span class="pc-kana">' + pc.kana + '</span><span class="pc-name">' + pc.name + (AVAIL_PC[idx] ? " ・ 楽器にある" : "") + "</span>";
+        b.setAttribute("aria-label", pc.kana + " " + pc.name + " を入力");
+        b.addEventListener("click", function () {
+          var midi = (inputOctave + 1) * 12 + idx;
+          melody.push(midi);
+          playNote(440 * Math.pow(2, (midi - 69) / 12));
+          converted = null;
+          document.getElementById("convertResult").hidden = true;
+          renderMelodyChips();
+        });
+        pcGrid.appendChild(b);
+      });
+      function setOctave(v) {
+        inputOctave = Math.min(6, Math.max(2, v));
+        octValEl.textContent = inputOctave;
+      }
+      document.getElementById("octDown").addEventListener("click", function () { setOctave(inputOctave - 1); });
+      document.getElementById("octUp").addEventListener("click", function () { setOctave(inputOctave + 1); });
+
+      function midiLabel(midi) {
+        var pc = PCS[midi % 12];
+        var oct = Math.floor(midi / 12) - 1;
+        return { kana: pc.kana, name: pc.name + oct };
+      }
+      function renderMelodyChips() {
+        melodyChipsEl.innerHTML = "";
+        if (!melody.length) {
+          melodyChipsEl.innerHTML = '<span class="empty">まだ入力がありません。上の音をタップしてください</span>';
+          return;
+        }
+        melody.forEach(function (m) {
+          var lb = midiLabel(m);
+          var s = document.createElement("span");
+          s.className = "chip";
+          s.innerHTML = lb.kana + "<small>" + lb.name + "</small>";
+          melodyChipsEl.appendChild(s);
+        });
+      }
+      document.getElementById("melUndoBtn").addEventListener("click", function () {
+        melody.pop();
+        converted = null;
+        document.getElementById("convertResult").hidden = true;
+        renderMelodyChips();
+      });
+      document.getElementById("melClearBtn").addEventListener("click", function () {
+        melody = [];
+        converted = null;
+        document.getElementById("convertResult").hidden = true;
+        renderMelodyChips();
+      });
+      document.getElementById("melPlayBtn").addEventListener("click", function () {
+        if (!melody.length) return;
+        ensureAudio();
+        var freqs = melody.map(function (m) { return 440 * Math.pow(2, (m - 69) / 12); });
+        var chipEls = Array.prototype.slice.call(melodyChipsEl.querySelectorAll(".chip"));
+        playFreqs(freqs, chipEls);
+      });
+
+      function nearestNote(midi) {
+        var best = null, bd = 1e9;
+        ALL_NOTES.forEach(function (n) {
+          var d = Math.abs(n.midi - midi);
+          if (d < bd || (d === bd && best && n.midi < best.midi)) { bd = d; best = n; }
+        });
+        return best;
+      }
+
+      document.getElementById("convertBtn").addEventListener("click", function () {
+        if (!melody.length) return;
+        var ids = [], changed = [], changedCount = 0;
+        melody.forEach(function (m) {
+          var n = nearestNote(m);
+          ids.push(n.id);
+          var ch = n.midi !== m;
+          changed.push(ch);
+          if (ch) changedCount++;
+        });
+        converted = { ids: ids, changed: changed };
+
+        var beforeEl = document.getElementById("beforeChips");
+        beforeEl.innerHTML = "";
+        melody.forEach(function (m, i) {
+          var lb = midiLabel(m);
+          var s = document.createElement("span");
+          s.className = "chip" + (changed[i] ? " changed" : "");
+          s.innerHTML = lb.kana + "<small>" + lb.name + "</small>";
+          beforeEl.appendChild(s);
+        });
+        var afterEl = document.getElementById("afterChips");
+        afterEl.innerHTML = "";
+        ids.forEach(function (id, i) {
+          var s = chipFor(id);
+          if (changed[i]) s.classList.add("changed");
+          afterEl.appendChild(s);
+        });
+        document.getElementById("convertStatus").textContent = changedCount
+          ? changedCount + "音を、楽器で出せる一番近い音に寄せました（赤いチップ）"
+          : "全ての音が、そのまま楽器で弾けます";
+        document.getElementById("convertResult").hidden = false;
+        document.getElementById("convertResult").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+
+      document.getElementById("afterPlayBtn").addEventListener("click", function () {
+        if (!converted) return;
+        ensureAudio();
+        transposePan.setFace(NOTE_MAP[converted.ids[0]].face);
+        playIds(transposePan, converted.ids.slice(), {});
+      });
+      document.getElementById("sendToTabBtn").addEventListener("click", function () {
+        if (!converted) return;
+        phrase = converted.ids.slice();
+        renderPhraseChips();
+        selectTab("tab");
+        setTabStatus("移調ツールから送られました。名前を付けて保存できます");
+      });
+
+      /* ===== コードタブ ===== */
+      var chordPanF = createPan(document.getElementById("panChordF"), { face: "front" });
+      var chordPanB = createPan(document.getElementById("panChordB"), { face: "back" });
+      var chordGrid = document.getElementById("chordGrid");
+      var chordInfoEl = document.getElementById("chordInfo");
+      CHORDS.forEach(function (ch) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = ch.name;
+        b.setAttribute("aria-pressed", "false");
+        b.addEventListener("click", function () {
+          Array.prototype.forEach.call(chordGrid.children, function (c) { c.setAttribute("aria-pressed", "false"); });
+          b.setAttribute("aria-pressed", "true");
+          var set = {};
+          ch.pcs.forEach(function (pc) { set[pc] = true; });
+          chordPanF.setChord(set, ch.root);
+          chordPanB.setChord(set, ch.root);
+          /* コードの音を鳴らす：構成音に当たる全ての音板を、低い音から順にストラム再生 */
+          if (ensureAudio()) {
+            var tones = ALL_NOTES.filter(function (n) { return set[n.midi % 12]; });
+            tones.sort(function (a, b) { return a.midi - b.midi; });
+            tones.forEach(function (n, i) {
+              setTimeout(function () {
+                playNote(n.freq);
+                if (n.face === "front") chordPanF.flash(n.id);
+                else chordPanB.flash(n.id);
+              }, i * 70);
+            });
+          }
+          var names = ch.pcs.map(function (pc) { return PCS[pc].kana; }).join("・");
+          chordInfoEl.innerHTML = "";
+          var bold = document.createElement("b");
+          bold.textContent = ch.name;
+          chordInfoEl.appendChild(bold);
+          chordInfoEl.appendChild(document.createTextNode("構成音：" + names + "（金色がルート音 " + PCS[ch.root].kana + "）"));
+        });
+        chordGrid.appendChild(b);
+      });
+
+      /* ===== メトロノーム ===== */
+      var bpmInput = document.getElementById("bpm");
+      var bpmVal = document.getElementById("bpmVal");
+      var metroOn = false, metroTimer = null, beatCount = 0;
+      var beatEls = [0, 1, 2, 3].map(function (i) { return document.getElementById("beat" + i); });
+      function setBpm(v) {
+        bpm = Math.min(120, Math.max(40, v));
+        bpmInput.value = bpm;
+        bpmVal.textContent = bpm;
+      }
+      bpmInput.addEventListener("input", function () { setBpm(parseInt(bpmInput.value, 10)); });
+      document.getElementById("bpmDown").addEventListener("click", function () { setBpm(bpm - 1); });
+      document.getElementById("bpmUp").addEventListener("click", function () { setBpm(bpm + 1); });
+      function metroTick() {
+        if (!metroOn) return;
+        var beat = beatCount % 4;
+        beatEls.forEach(function (el, i) {
+          el.classList.toggle("on", i === beat);
+          el.classList.toggle("accent", i === beat && beat === 0);
+        });
+        playClick(beat === 0);
+        beatCount++;
+        metroTimer = setTimeout(metroTick, 60000 / bpm);
+      }
+      var metroBtn = document.getElementById("metroBtn");
+      metroBtn.addEventListener("click", function () {
+        metroOn = !metroOn;
+        if (metroOn) {
+          ensureAudio();
+          beatCount = 0;
+          metroBtn.textContent = "メトロノーム停止";
+          metroTick();
+        } else {
+          if (metroTimer) clearTimeout(metroTimer);
+          metroTimer = null;
+          metroBtn.textContent = "メトロノーム開始";
+          beatEls.forEach(function (el) { el.classList.remove("on", "accent"); });
+        }
+      });
+      setBpm(60);
+    </script>
+<script data-goatcounter="https://handpank.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+  </body>
+</html>

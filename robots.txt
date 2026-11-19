@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://githubkokutarou6.github.io/handpan/sitemap.xml
